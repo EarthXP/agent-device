@@ -32,6 +32,7 @@ import {
   isClickLikeCommand,
   parseReplaySeriesFlags,
 } from '../script-utils.ts';
+import { looksLikeInlineJson } from '../../utils/json-input.ts';
 import {
   appendAppLogMarker,
   clearAppLogFiles,
@@ -880,10 +881,7 @@ function maybeResolvePushPayloadPath(payloadArg: string, cwd?: string): string {
     }
     return resolvedPath;
   }
-  if (
-    (trimmed.startsWith('{') && trimmed.endsWith('}')) ||
-    (trimmed.startsWith('[') && trimmed.endsWith(']'))
-  ) {
+  if (looksLikeInlineJson(trimmed)) {
     return trimmed;
   }
   throw new AppError('INVALID_ARGS', `Push payload file not found: ${resolvedPath}`);
